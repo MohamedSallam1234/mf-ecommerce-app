@@ -1,0 +1,20 @@
+ion-tab-bar {
+  background: #8e6cef; // or your desired color
+
+  ion-tab-button {
+    &.tab-selected {
+      position: relative;
+      color: var(--ion-color-primary); // selected color
+
+      &::after {
+        content: "";
+        display: block;
+        width: 20px;
+        height: 2px;
+        background: #000; /* black underline */
+        margin: 4px auto 0 auto;
+        border-radius: 1px;
+      }
+    }
+  }
+}
