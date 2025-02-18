@@ -1,0 +1,58 @@
+<ion-content>
+  <div class="sign-up-container">
+    <ion-button fill="clear" routerLink="/signin">
+      <ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon>
+    </ion-button>
+    <h1>Create an account</h1>
+
+    <div>
+      <ion-item class="custom-input">
+        <ion-label position="floating">First Name</ion-label>
+        <ion-input
+          type="text"
+          [value]="firstName()"
+          (ionInput)="updateFirstName($event)"
+        ></ion-input>
+      </ion-item>
+      <ion-item class="custom-input">
+        <ion-label position="floating">Last Name</ion-label>
+        <ion-input
+          type="text"
+          [value]="lastName()"
+          (ionInput)="updateLastName($event)"
+        ></ion-input>
+      </ion-item>
+      <ion-item class="custom-input">
+        <ion-label position="floating">Email Address</ion-label>
+        <ion-input
+          type="email"
+          [value]="email()"
+          (ionInput)="updateEmail($event)"
+        ></ion-input>
+      </ion-item>
+      <ion-item class="custom-input">
+        <ion-label position="floating">Password</ion-label>
+        <ion-input
+          type="password"
+          autocomplete="new-password"
+          [value]="password()"
+          (ionInput)="updatePassword($event)"
+        ></ion-input>
+      </ion-item>
+    </div>
+    <div>
+      <ion-button
+        class="continue-button"
+        expand="block"
+        (click)="onSignup()"
+        [disabled]="isLoading() || !email() || !password() || !firstName() || !lastName()"
+      >
+        @if (isLoading()) {
+        <ion-spinner name="circular"></ion-spinner>
+        } @else {
+        <span>Continue</span>
+        }
+      </ion-button>
+    </div>
+  </div>
+</ion-content>

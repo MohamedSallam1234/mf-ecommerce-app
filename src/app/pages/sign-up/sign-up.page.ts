@@ -1,32 +1,56 @@
 import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import {
-  IonicModule,
+  IonContent,
+  IonItem,
+  IonLabel,
+  IonInput,
+  IonButton,
+  IonIcon,
+  IonSpinner,
   LoadingController,
   ToastController,
-} from '@ionic/angular';
-import { Router, RouterModule } from '@angular/router';
+} from '@ionic/angular/standalone';
+import { addIcons } from 'ionicons';
+import { arrowBackOutline } from 'ionicons/icons';
+import { RouterModule, Router } from '@angular/router';
 import { AuthService } from '../../services/auth/auth.service';
-import { FormsModule } from '@angular/forms';
 import { User } from '../../models/user.model';
 import { firstValueFrom } from 'rxjs';
-
 @Component({
-  selector: 'app-login',
+  selector: 'app-sign-up',
+  templateUrl: './sign-up.page.html',
+  styleUrls: ['./sign-up.page.scss'],
   standalone: true,
-  imports: [CommonModule, IonicModule, FormsModule, RouterModule],
-  templateUrl: './sign-in.page.html',
-  styleUrls: ['./sign-in.page.scss'],
+  imports: [
+    RouterModule,
+    IonInput,
+    CommonModule,
+    FormsModule,
+    IonContent,
+    IonItem,
+    IonLabel,
+    IonButton,
+    IonIcon,
+    IonSpinner,
+  ],
 })
-export class SignInPage {
-  private router = inject(Router);
+export class SignUpPage {
   private authService = inject(AuthService);
+  private router = inject(Router);
   private loadingCtrl = inject(LoadingController);
   private toastCtrl = inject(ToastController);
 
+  firstName = signal('');
+  lastName = signal('');
   email = signal('');
   password = signal('');
   isLoading = signal(false);
+
+  constructor() {
+    addIcons({ arrowBackOutline });
+  }
 
   private async showToast({
     message,
@@ -52,9 +76,38 @@ export class SignInPage {
     });
     await toast.present();
   }
-  async onSignin() {
+
+  isValidEmail(email: string): boolean {
+    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+    return email ? emailRegex.test(email) : true;
+  }
+
+  isValidPassword(password: string): boolean {
+    return password ? password.length >= 6 : true;
+  }
+
+  async onSignup() {
     if (this.isLoading()) {
-      console.warn('Sign-in attempt while already loading.');
+      console.warn('Sign-up attempt while already loading.');
+      return;
+    }
+
+    // Add validation checks before proceeding
+    if (!this.isValidEmail(this.email())) {
+      await this.showToast({
+        message: 'Please enter a valid email address',
+        color: 'danger',
+        duration: 3000,
+      });
+      return;
+    }
+
+    if (!this.isValidPassword(this.password())) {
+      await this.showToast({
+        message: 'Password must be at least 6 characters long',
+        color: 'danger',
+        duration: 3000,
+      });
       return;
     }
 
@@ -70,29 +123,28 @@ export class SignInPage {
 
     try {
       const credentials: User = {
+        firstName: this.firstName(),
+        lastName: this.lastName(),
         email: this.email(),
         password: this.password(),
-        role: 'user',
       };
-
-      console.log('Attempting sign in with credentials:', credentials);
+      console.log('Attempting sign-up with credentials:', credentials);
       const response: any = await firstValueFrom(
-        this.authService.signin(credentials)
+        this.authService.signup(credentials)
       );
       console.log('Received response:', response);
-
       if (response.success) {
         await this.showToast({
-          message: 'Welcome back! Login successful',
+          message: 'Account created successfully!',
           color: 'success',
           duration: 2000,
         });
         console.log('Navigating to Tabs Page.');
         this.router.navigate(['/tabs']);
       } else {
-        console.warn('Sign-in failed without error catch:', response);
+        console.warn('Sign-up failed without error catch:', response);
         await this.showToast({
-          message: 'Login failed. Please try again.',
+          message: 'Sign-up failed. Please try again.',
           color: 'danger',
           duration: 3000,
         });
@@ -100,7 +152,7 @@ export class SignInPage {
     } catch (error: any) {
       console.error('Sign in error caught:', error);
       const errorMessage =
-        error.error?.message || 'Login failed. Please try again.';
+        error.error?.message || 'Sign-up failed. Please try again.';
       await this.showToast({
         message: errorMessage,
         color: 'danger',
@@ -111,6 +163,14 @@ export class SignInPage {
       await loading.dismiss();
       console.log('Loading spinner dismissed.');
     }
+  }
+
+  updateFirstName(event: CustomEvent) {
+    this.firstName.set(event.detail.value);
+  }
+
+  updateLastName(event: CustomEvent) {
+    this.lastName.set(event.detail.value);
   }
 
   updateEmail(event: CustomEvent) {
