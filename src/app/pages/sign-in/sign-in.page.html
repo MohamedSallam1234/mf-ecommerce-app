@@ -1,0 +1,62 @@
+<ion-content class="ion-padding">
+  <div class="sign-in-container">
+    <h1>Sign in</h1>
+
+    <ion-item class="custom-input">
+      <ion-label position="floating">Email Address</ion-label>
+      <ion-input
+        type="email"
+        [value]="email()"
+        (ionInput)="updateEmail($event)"
+        [disabled]="isLoading()"
+      ></ion-input>
+    </ion-item>
+
+    <ion-item class="custom-input">
+      <ion-label position="floating" autocomplete="off">Password</ion-label>
+      <ion-input
+        type="password"
+        [value]="password()"
+        (ionInput)="updatePassword($event)"
+        [disabled]="isLoading()"
+      ></ion-input>
+    </ion-item>
+
+    <ion-button
+      expand="block"
+      class="continue-button"
+      (click)="onSignin()"
+      [disabled]="isLoading() || !email() || !password()"
+    >
+      @if (isLoading()) {
+      <ion-spinner name="circular"></ion-spinner>
+      } @else {
+      <span>Continue</span>
+      }
+    </ion-button>
+
+    <div class="create-account">
+      <span>Don't have an Account? </span>
+      <a routerLink="/signup">Create One</a>
+    </div>
+
+    <div class="divider">
+      <span>or</span>
+    </div>
+
+    <ion-button expand="block" class="social-button">
+      <ion-icon src="/assets/icon/apple-icon.svg"></ion-icon>
+      Continue With Apple
+    </ion-button>
+
+    <ion-button expand="block" class="social-button">
+      <ion-icon src="assets/icon/google-icon.svg"></ion-icon>
+      Continue With Google
+    </ion-button>
+
+    <ion-button expand="block" class="social-button">
+      <ion-icon src="assets/icon/facebook-icon.svg"></ion-icon>
+      Continue With Facebook
+    </ion-button>
+  </div>
+</ion-content>

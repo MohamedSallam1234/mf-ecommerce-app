@@ -11,7 +11,8 @@ const app = express();
 // Middleware
 app.use(
   cors({
-    origin: "http://localhost:8100",
+    origin: "*",
+    methods: "*",
   })
 );
 app.use(express.json());

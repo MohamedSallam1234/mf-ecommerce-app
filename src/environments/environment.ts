@@ -1,6 +1,6 @@
-export const environment = {
+export const environment: any = {
   production: false,
-  apiUrl: 'http://localhost:3000/api/auth',
+  apiUrl: 'https://97d2-154-178-108-154.ngrok-free.app/api/auth',
   endpoints: {
     signup: '/signup',
     signin: '/signin',

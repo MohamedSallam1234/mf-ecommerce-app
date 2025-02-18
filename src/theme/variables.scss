@@ -1,2 +1,11 @@
 // For information on how to create your own theme, please see:
 // http://ionicframework.com/docs/theming/
+:root {
+  --ion-color-primary: #6f3be1; /* example purple */
+  --ion-color-primary-rgb: 111, 59, 225;
+}
+
+ion-tab-bar {
+  --color: #9b9b9b; /* unselected icon color */
+  --color-selected: #6f3be1; /* selected icon color */
+}
