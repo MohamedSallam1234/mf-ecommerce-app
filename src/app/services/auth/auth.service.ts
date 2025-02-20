@@ -9,7 +9,7 @@ import { catchError, timeout } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class AuthService {
-  private apiUrl = environment.apiUrl;
+  private apiUrl = environment.authApiUrl;
   private endpoints = environment.endpoints;
   private http = inject(HttpClient);
 
