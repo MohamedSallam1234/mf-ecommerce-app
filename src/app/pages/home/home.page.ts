@@ -25,7 +25,7 @@ import {
 } from 'ionicons/icons';
 import { RouterModule } from '@angular/router';
 import { ProductService } from '../../services/product/product.service';
-import { finalize, firstValueFrom } from 'rxjs';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-home',

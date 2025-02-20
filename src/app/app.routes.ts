@@ -1,10 +1,5 @@
 import { Routes } from '@angular/router';
 import { TabsPage } from './pages/tabs/tabs.page';
-import { HomePage } from './pages/home/home.page';
-// import { NotificationsPage } from './pages/notifications/notifications.page';
-// import { CartPage } from './pages/cart/cart.page';
-// import { ProfilePage } from './pages/profile/profile.page';
-//import { authGuard } from './guards/auth.guard';
 import { SignInPage } from './pages/sign-in/sign-in.page';
 import { SignUpPage } from './pages/sign-up/sign-up.page';
 
@@ -27,29 +22,30 @@ export const routes: Routes = [
     component: TabsPage,
     children: [
       {
+        path: 'home',
+        loadComponent: () =>
+          import('./pages/home/home.page').then((m) => m.HomePage),
+      },
+      {
         path: '',
         redirectTo: 'home',
         pathMatch: 'full',
       },
-      {
-        path: 'home',
-        component: HomePage,
-      },
-      // {
-      //   path: 'notifications',
-      //   component: NotificationsPage,
-      //   // Example: Only admin can access notifications
-      //   // data: { roles: ['admin'] },
-      // },
-      // {
-      //   path: 'cart',
-      //   component: CartPage,
-      // },
-      // {
-      //   path: 'profile',
-      //   component: ProfilePage,
-      // },
     ],
+  },
+  {
+    path: 'categories',
+    loadComponent: () =>
+      import('./pages/categories/categories.page').then(
+        (m) => m.CategoriesPage
+      ),
+  },
+  {
+    path: 'category-list/:category',
+    loadComponent: () =>
+      import('./pages/category-list/category-list.page').then(
+        (m) => m.CategoryListPage
+      ),
   },
   {
     path: '**',

@@ -1,4 +1,4 @@
-<ion-content [scrollY]="true" [scrollEvents]="true" class="ion-padding">
+<ion-content class="ion-padding">
   <div class="home-container">
     <div class="header">
       <ion-button fill="clear" class="cart-button">
@@ -14,7 +14,12 @@
 
     <div class="section-header">
       <h2>Categories</h2>
-      <ion-button fill="clear" class="see-all-button">See All</ion-button>
+      <ion-button
+        fill="clear"
+        class="see-all-button"
+        [routerLink]="['/categories']"
+        >See All</ion-button
+      >
     </div>
 
     <div class="categories-container">
