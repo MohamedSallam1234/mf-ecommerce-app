@@ -1,0 +1,41 @@
+<ion-content class="ion-padding">
+  <ion-button fill="clear" class="back-button" (click)="goBack()">
+    <ion-icon name="arrow-back-outline"></ion-icon>
+  </ion-button>
+
+  <div class="favorites-header">
+    <h1>Favorites</h1>
+  </div>
+
+  <ion-grid>
+    <ion-row>
+      @if (favoritesService.getFavorites()().length === 0) {
+      <ion-col size="12">
+        <div class="empty-state">
+          <p>No favorites added yet</p>
+        </div>
+      </ion-col>
+      } @else { @for (product of favoritesService.getFavorites()(); track
+      product.id) {
+      <ion-col size="6">
+        <div class="product-card">
+          <div class="product-image">
+            <img [src]="product.image" [alt]="product.title" />
+            <ion-button
+              fill="clear"
+              class="favorite-button"
+              (click)="removeFromFavorites(product)"
+            >
+              <ion-icon name="heart"></ion-icon>
+            </ion-button>
+          </div>
+          <div class="product-info">
+            <h3>{{ product.title }}</h3>
+            <span class="price">${{ product.price }}</span>
+          </div>
+        </div>
+      </ion-col>
+      } }
+    </ion-row>
+  </ion-grid>
+</ion-content>
