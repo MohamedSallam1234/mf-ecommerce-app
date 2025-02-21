@@ -31,8 +31,14 @@
         <div class="product-card">
           <div class="product-image">
             <img [src]="product.image" [alt]="product.title" />
-            <ion-button fill="clear" class="favorite-button">
-              <ion-icon name="heart-outline"></ion-icon>
+            <ion-button
+              fill="clear"
+              class="favorite-button"
+              (click)="toggleFavorite($event, product)"
+            >
+              <ion-icon
+                [name]="favoritesService.isFavorite(product.id) ? 'heart' : 'heart-outline'"
+              ></ion-icon>
             </ion-button>
           </div>
           <div class="product-info">

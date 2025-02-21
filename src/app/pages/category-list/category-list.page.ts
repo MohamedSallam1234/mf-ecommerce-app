@@ -11,9 +11,10 @@ import {
   IonSkeletonText,
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { arrowBackOutline, heartOutline } from 'ionicons/icons';
-import { CategoriesService } from '../../services/categories.service';
+import { arrowBackOutline, heartOutline, heart } from 'ionicons/icons';
+import { CategoriesService } from '../../services/categories/categories.service';
 import { finalize } from 'rxjs';
+import { FavoritesService } from '../../services/favorites/favorites.service';
 
 @Component({
   selector: 'app-category-list',
@@ -40,9 +41,10 @@ export class CategoryListPage implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private categoriesService: CategoriesService
+    private categoriesService: CategoriesService,
+    public favoritesService: FavoritesService
   ) {
-    addIcons({ arrowBackOutline, heartOutline });
+    addIcons({ arrowBackOutline, heartOutline, heart });
   }
 
   ngOnInit() {
@@ -66,6 +68,11 @@ export class CategoryListPage implements OnInit {
           this.error.set('Failed to load products. Please try again.');
         },
       });
+  }
+
+  async toggleFavorite(event: Event, product: any) {
+    event.stopPropagation();
+    await this.favoritesService.toggleFavorite(product);
   }
 
   goBack() {
