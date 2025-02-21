@@ -22,9 +22,11 @@ import {
   searchOutline,
   home,
   cartOutline,
+  heart,
 } from 'ionicons/icons';
 import { RouterModule } from '@angular/router';
 import { ProductService } from '../../services/product/product.service';
+import { FavoritesService } from '../../services/favorites/favorites.service';
 import { finalize } from 'rxjs';
 
 @Component({
@@ -48,7 +50,7 @@ import { finalize } from 'rxjs';
 })
 export class HomePage implements OnInit {
   private productService = inject(ProductService);
-
+  public favoritesService = inject(FavoritesService);
   categories = [
     {
       name: 'Electronics',
@@ -83,6 +85,7 @@ export class HomePage implements OnInit {
       personOutline,
       homeOutline,
       searchOutline,
+      heart,
     });
   }
 
@@ -105,6 +108,10 @@ export class HomePage implements OnInit {
 
   ngOnInit() {
     this.loadProducts();
+  }
+  async toggleFavorite(event: Event, product: any) {
+    event.stopPropagation();
+    await this.favoritesService.toggleFavorite(product);
   }
 
   onSearch(event: any) {

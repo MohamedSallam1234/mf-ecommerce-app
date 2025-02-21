@@ -1,17 +1,17 @@
 ion-tab-bar {
-  background: #8e6cef; // or your desired color
+  background: #8e6cef;
 
   ion-tab-button {
     &.tab-selected {
       position: relative;
-      color: var(--ion-color-primary); // selected color
+      color: var(--ion-color-primary);
 
       &::after {
         content: "";
         display: block;
         width: 20px;
         height: 2px;
-        background: #000; /* black underline */
+        background: #000;
         margin: 4px auto 0 auto;
         border-radius: 1px;
       }
