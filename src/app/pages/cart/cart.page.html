@@ -1,0 +1,71 @@
+<ion-content class="ion-padding">
+  <div class="cart-header">
+    <ion-button fill="clear" class="back-button" (click)="goBack()">
+      <ion-icon name="arrow-back-outline"></ion-icon>
+    </ion-button>
+    @if (cartService.getCartItems()().length > 0) {
+    <ion-button fill="clear" class="remove-all" (click)="removeAll()">
+      Remove All
+    </ion-button>
+    }
+  </div>
+
+  @if (cartService.getCartItems()().length === 0) {
+  <div class="empty-cart">
+    <p>Your cart is empty</p>
+  </div>
+  } @else {
+  <div class="cart-items">
+    @for (item of cartService.getCartItems()(); track item.id) {
+    <div class="cart-item">
+      <img [src]="item.image" [alt]="item.title" />
+      <div class="item-details">
+        <h2>{{ item.title }}</h2>
+        <div class="item-options">
+          @if (item.size) {
+          <span class="option">Size - {{ item.size }}</span>
+          } @if (item.color) {
+          <span class="option">Color - {{ item.color }}</span>
+          }
+        </div>
+        <div class="price-quantity">
+          <span class="price">${{ item.price }}</span>
+          <div class="quantity-controls">
+            <ion-button fill="clear" (click)="updateQuantity(item.id, -1)">
+              <ion-icon name="remove-outline"></ion-icon>
+            </ion-button>
+            <span>{{ item.quantity }}</span>
+            <ion-button fill="clear" (click)="updateQuantity(item.id, 1)">
+              <ion-icon name="add-outline"></ion-icon>
+            </ion-button>
+          </div>
+        </div>
+      </div>
+    </div>
+    }
+  </div>
+
+  <div class="cart-summary">
+    <div class="summary-item">
+      <span>Subtotal</span>
+      <span>${{ cartService.getSubtotal().toFixed(2) }}</span>
+    </div>
+    <div class="summary-item">
+      <span>Shipping Cost</span>
+      <span>${{ cartService.getShippingCost() }}</span>
+    </div>
+    <div class="summary-item">
+      <span>Tax</span>
+      <span>${{ cartService.getTax() }}</span>
+    </div>
+    <div class="summary-item total">
+      <span>Total</span>
+      <span>${{ cartService.getTotal().toFixed(2) }}</span>
+    </div>
+  </div>
+
+  <ion-button expand="block" class="checkout-button" (click)="checkout()">
+    Checkout
+  </ion-button>
+  }
+</ion-content>
