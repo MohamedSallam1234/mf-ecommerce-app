@@ -43,4 +43,8 @@ export class FavoritesPage {
   async removeFromFavorites(product: any) {
     await this.favoritesService.toggleFavorite(product);
   }
+
+  navigateToProduct(id: number) {
+    this.router.navigate(['/product', id]);
+  }
 }

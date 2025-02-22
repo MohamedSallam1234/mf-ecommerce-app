@@ -28,7 +28,7 @@
       </ion-col>
       } @else { @for (product of products(); track product.id) {
       <ion-col size="6">
-        <div class="product-card">
+        <div class="product-card" (click)="goToProduct(product.id)">
           <div class="product-image">
             <img [src]="product.image" [alt]="product.title" />
             <ion-button

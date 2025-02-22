@@ -78,4 +78,8 @@ export class CategoryListPage implements OnInit {
   goBack() {
     this.router.navigate(['/categories']);
   }
+
+  goToProduct(productId: number) {
+    this.router.navigate(['/product', productId]);
+  }
 }
