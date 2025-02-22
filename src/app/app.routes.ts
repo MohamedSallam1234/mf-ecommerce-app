@@ -34,6 +34,11 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'profile',
+        loadComponent: () =>
+          import('./pages/profile/profile.page').then((m) => m.ProfilePage),
+      },
+      {
         path: '',
         redirectTo: 'home',
         pathMatch: 'full',
@@ -53,6 +58,18 @@ export const routes: Routes = [
       import('./pages/category-list/category-list.page').then(
         (m) => m.CategoryListPage
       ),
+  },
+  {
+    path: 'product/:id',
+    loadComponent: () =>
+      import('./pages/product-details/product-details.page').then(
+        (m) => m.ProductDetailsPage
+      ),
+  },
+  {
+    path: 'cart',
+    loadComponent: () =>
+      import('./pages/cart/cart.page').then((m) => m.CartPage),
   },
   {
     path: '**',

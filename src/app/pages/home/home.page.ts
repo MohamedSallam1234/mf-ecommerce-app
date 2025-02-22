@@ -28,7 +28,7 @@ import { RouterModule } from '@angular/router';
 import { ProductService } from '../../services/product/product.service';
 import { FavoritesService } from '../../services/favorites/favorites.service';
 import { finalize } from 'rxjs';
-
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
@@ -51,6 +51,7 @@ import { finalize } from 'rxjs';
 export class HomePage implements OnInit {
   private productService = inject(ProductService);
   public favoritesService = inject(FavoritesService);
+  private router = inject(Router);
   categories = [
     {
       name: 'Electronics',
@@ -71,8 +72,10 @@ export class HomePage implements OnInit {
   ];
 
   products = signal<any[]>([]);
+  filteredProducts = signal<any[]>([]);
   isLoading = signal(false);
   error = signal<string | null>(null);
+  searchTerm = signal('');
 
   constructor() {
     addIcons({
@@ -89,6 +92,26 @@ export class HomePage implements OnInit {
     });
   }
 
+  onSearch(event: any) {
+    const searchTerm = event.target.value.toLowerCase();
+    this.searchTerm.set(searchTerm);
+
+    if (!searchTerm) {
+      this.filteredProducts.set(this.products());
+      return;
+    }
+
+    const filtered = this.products().filter((product) => {
+      return (
+        product.title.toLowerCase().includes(searchTerm) ||
+        product.description.toLowerCase().includes(searchTerm) ||
+        product.category.toLowerCase().includes(searchTerm)
+      );
+    });
+
+    this.filteredProducts.set(filtered);
+  }
+
   async loadProducts() {
     this.isLoading.set(true);
     this.error.set(null);
@@ -97,8 +120,10 @@ export class HomePage implements OnInit {
       .getProducts()
       .pipe(finalize(() => this.isLoading.set(false)))
       .subscribe({
-        next: (products) => this.products.set(products),
-
+        next: (products) => {
+          this.products.set(products);
+          this.filteredProducts.set(products);
+        },
         error: (error) => {
           console.error('Error loading products:', error);
           this.error.set(error.message || 'Failed to load products');
@@ -113,8 +138,7 @@ export class HomePage implements OnInit {
     event.stopPropagation();
     await this.favoritesService.toggleFavorite(product);
   }
-
-  onSearch(event: any) {
-    console.log('Search:', event.target.value);
+  navigateToProduct(id: number) {
+    this.router.navigate(['/product', id]);
   }
 }

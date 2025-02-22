@@ -1,0 +1,133 @@
+.cart-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+
+  h1 {
+    font-size: 24px;
+    font-weight: 600;
+    margin: 0;
+  }
+
+  .remove-all {
+    --color: var(--ion-color-danger);
+    font-size: 14px;
+  }
+}
+
+.cart-items {
+  margin-bottom: 24px;
+
+  .cart-item {
+    display: flex;
+    gap: 16px;
+    background: white;
+    border-radius: 12px;
+    padding: 12px;
+    margin-bottom: 16px;
+
+    img {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+
+    .item-details {
+      flex: 1;
+
+      h2 {
+        font-size: 16px;
+        font-weight: 500;
+        margin: 0 0 8px;
+      }
+
+      .item-options {
+        margin-bottom: 8px;
+
+        .option {
+          font-size: 14px;
+          color: #666;
+          margin-right: 12px;
+        }
+      }
+
+      .price-quantity {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .price {
+          font-size: 18px;
+          font-weight: 600;
+          color: #8e6cef;
+        }
+
+        .quantity-controls {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+
+          ion-button {
+            --padding-start: 8px;
+            --padding-end: 8px;
+            --border-radius: 50%;
+            --background: rgba(142, 108, 239, 0.1);
+            margin: 0;
+
+            ion-icon {
+              color: #8e6cef;
+            }
+          }
+
+          span {
+            min-width: 24px;
+            text-align: center;
+          }
+        }
+      }
+    }
+  }
+}
+
+.cart-summary {
+  background: white;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 24px;
+
+  .summary-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    font-size: 14px;
+    color: #666;
+
+    &.total {
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid #eee;
+      font-size: 18px;
+      font-weight: 600;
+      color: #272727;
+    }
+  }
+}
+
+.checkout-button {
+  --background: #8e6cef;
+  --border-radius: 12px;
+  margin: 0;
+}
+
+.empty-cart {
+  text-align: center;
+  padding: 40px 20px;
+  color: #666;
+
+  p {
+    font-size: 16px;
+    margin: 0;
+  }
+}

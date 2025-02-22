@@ -1,7 +1,7 @@
 <ion-content class="ion-padding">
   <div class="home-container">
     <div class="header">
-      <ion-button fill="clear" class="cart-button">
+      <ion-button fill="clear" class="cart-button" [routerLink]="['/cart']">
         <ion-icon name="bag-outline" slot="icon-only"></ion-icon>
       </ion-button>
     </div>
@@ -10,6 +10,7 @@
       placeholder="Search"
       class="custom-searchbar"
       (ionInput)="onSearch($event)"
+      [value]="searchTerm()"
     ></ion-searchbar>
 
     <div class="section-header">
@@ -40,7 +41,7 @@
 
     <ion-grid class="products-grid">
       <ion-row>
-        @if (isLoading()) { @for (item of [1,2,3,4]; track item) {
+        @if (isLoading()) { @for (product of products(); track product.id) {
         <ion-col size="6">
           <div class="product-card">
             <div class="product-image">
@@ -63,9 +64,15 @@
         </ion-col>
         } } @else if (error()) {
         <div class="error-message">{{ error() }}</div>
-        } @else { @for (product of products(); track product.id) {
+        } @else { @if (filteredProducts().length === 0) {
+        <ion-col size="12">
+          <div class="no-results">
+            <p>No products found matching your search.</p>
+          </div>
+        </ion-col>
+        } @else { @for (product of filteredProducts(); track product.id) {
         <ion-col size="6">
-          <div class="product-card">
+          <div class="product-card" (click)="navigateToProduct(product.id)">
             <div class="product-image">
               <img [src]="product.image" [alt]="product.title" />
               <ion-button
@@ -84,7 +91,7 @@
             </div>
           </div>
         </ion-col>
-        } }
+        } } }
       </ion-row>
     </ion-grid>
   </div>

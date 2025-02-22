@@ -7,7 +7,7 @@ import {
 import { Observable, throwError } from 'rxjs';
 import { catchError, timeout, tap, map } from 'rxjs/operators';
 
-import { environment } from '../../../environments/environment';
+//import { environment } from '../../../environments/environment';
 
 // interface ProductResponse {
 //   status: string;
@@ -43,6 +43,22 @@ export class ProductService {
       tap((products) => console.log('Products:', products)),
       catchError((error: HttpErrorResponse) => {
         console.error('Error in getProducts request:', error);
+        return throwError(() => error);
+      })
+    );
+  }
+
+  getProductById(id: number): Observable<any> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+    });
+
+    return this.http.get<any>(`${this.productApiUrl}/${id}`, { headers }).pipe(
+      timeout(10000),
+      tap((product) => console.log('Product:', product)),
+      catchError((error: HttpErrorResponse) => {
+        console.error('Error in getProduct request:', error);
         return throwError(() => error);
       })
     );
