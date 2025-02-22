@@ -1,0 +1,87 @@
+.profile-container {
+  padding: 16px;
+}
+
+.profile-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 32px;
+  border-radius: 16px;
+  padding: 24px;
+}
+
+.profile-image-container {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  margin-bottom: 16px;
+
+  .profile-image {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  .camera-overlay {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background: #8e6cef;
+    border-radius: 50%;
+    padding: 8px;
+
+    ion-icon {
+      color: white;
+      font-size: 20px;
+    }
+  }
+}
+
+.profile-info {
+  text-align: center;
+
+  h2 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 600;
+    color: #333;
+  }
+
+  p {
+    margin: 4px 0;
+    color: #666;
+  }
+
+  .edit-button {
+    --color: #8e6cef;
+    font-weight: 500;
+  }
+}
+
+.menu-list {
+  background: transparent;
+  margin-bottom: 24px;
+
+  .menu-item {
+    --background: #f4f4f4;
+    --border-radius: 20px;
+    margin-bottom: 12px;
+
+    ion-icon {
+      color: #8e6cef;
+    }
+
+    ion-label {
+      font-weight: 500;
+      margin: 12px 0;
+    }
+  }
+}
+
+.sign-out-button {
+  --border-radius: 12px;
+  --background: #ff4961;
+  margin: 0;
+}
