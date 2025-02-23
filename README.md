@@ -93,11 +93,11 @@ Modern, full-featured e-commerce mobile application built with Ionic and Angular
 
 **Profile page**
 
-![Profile page](<src/assets/project-images/Profile page.png>)
+![Profile page](<src/assets/project-images/profile page.png>)
 
 **admin dashboard**
 
-![admin dashboard](<src/assets/project-images/admin dashboard.png>)
+![admin dashboard](<src/assets/project-images/Admin dashboard.png>)
 
 **Add product page**
 
