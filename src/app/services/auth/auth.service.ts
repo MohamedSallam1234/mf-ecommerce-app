@@ -68,17 +68,9 @@ export class AuthService {
   }
 
   clearCurrentUser() {
-    // Clear the user signal
     this.currentUser.set(null);
-
-    // Clear stored user data
     localStorage.removeItem('currentUser');
-
-    // Clear email
     this.currentUserEmail = null;
-
-    // Clear any other user-related data
-    // For example: tokens, session data, etc.
   }
 
   async isAdmin(): Promise<boolean> {
