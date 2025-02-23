@@ -5,6 +5,7 @@ const dotenv = require("dotenv");
 const authRoutes = require("./routes/auth.routes");
 const productRoutes = require("./routes/product.routes");
 const cartRoutes = require("./routes/cart.routes");
+const categoryRoutes = require("./routes/category.routes");
 
 dotenv.config();
 
@@ -17,6 +18,7 @@ app.use(
     methods: "*",
   })
 );
+
 app.use(express.json());
 
 // Connect to MongoDB
@@ -29,6 +31,7 @@ mongoose
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/cart", cartRoutes);
+app.use("/api", categoryRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
