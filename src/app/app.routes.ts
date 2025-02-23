@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { TabsPage } from './pages/tabs/tabs.page';
 import { SignInPage } from './pages/sign-in/sign-in.page';
 import { SignUpPage } from './pages/sign-up/sign-up.page';
+import { AdminGuard } from './guards/admin.guard';
 
 export const routes: Routes = [
   {
@@ -11,11 +12,13 @@ export const routes: Routes = [
   },
   {
     path: 'signin',
-    component: SignInPage,
+    loadComponent: () =>
+      import('./pages/sign-in/sign-in.page').then((m) => m.SignInPage),
   },
   {
     path: 'signup',
-    component: SignUpPage,
+    loadComponent: () =>
+      import('./pages/sign-up/sign-up.page').then((m) => m.SignUpPage),
   },
   {
     path: 'tabs',
@@ -55,7 +58,7 @@ export const routes: Routes = [
   {
     path: 'category-list/:category',
     loadComponent: () =>
-      import('./pages/category-list/category-list.page').then(
+      import('./pages/categories/category-list/category-list.page').then(
         (m) => m.CategoryListPage
       ),
   },
@@ -70,6 +73,33 @@ export const routes: Routes = [
     path: 'cart',
     loadComponent: () =>
       import('./pages/cart/cart.page').then((m) => m.CartPage),
+  },
+  {
+    path: 'admin',
+    canActivate: [AdminGuard],
+    children: [
+      {
+        path: '',
+        loadComponent: () =>
+          import('./pages/admin/admin-dashboard.page').then(
+            (m) => m.AdminDashboardPage
+          ),
+      },
+      {
+        path: 'add-product',
+        loadComponent: () =>
+          import('./pages/admin/add-product/add-product.page').then(
+            (m) => m.AddProductPage
+          ),
+      },
+      {
+        path: 'edit-product/:id',
+        loadComponent: () =>
+          import('./pages/admin/edit-product/edit-product.page').then(
+            (m) => m.EditProductPage
+          ),
+      },
+    ],
   },
   {
     path: '**',

@@ -1,0 +1,11 @@
+{
+  "SIGNUP": {
+    "TITLE": "Create an account",
+    "FIRST_NAME": "First Name",
+    "LAST_NAME": "Last Name",
+    "EMAIL": "Email Address",
+    "PASSWORD": "Password",
+    "CONTINUE": "Continue",
+    "SUBMIT": "Sign Up"
+  }
+}
