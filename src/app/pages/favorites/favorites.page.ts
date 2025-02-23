@@ -44,7 +44,7 @@ export class FavoritesPage {
     await this.favoritesService.toggleFavorite(product);
   }
 
-  navigateToProduct(id: number) {
-    this.router.navigate(['/product', id]);
+  navigateToProduct(_id: string) {
+    this.router.navigate(['/product', _id]);
   }
 }

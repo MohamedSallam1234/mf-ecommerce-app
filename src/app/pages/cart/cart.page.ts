@@ -5,10 +5,6 @@ import {
   IonContent,
   IonButton,
   IonIcon,
-  IonList,
-  IonItem,
-  IonLabel,
-  IonThumbnail,
   ToastController,
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
@@ -35,8 +31,8 @@ export class CartPage {
     this.router.navigate(['/tabs/home']);
   }
 
-  async updateQuantity(productId: number, change: number) {
-    await this.cartService.updateQuantity(productId, change);
+  async updateQuantity(_id: string, change: number) {
+    await this.cartService.updateQuantity(_id, change);
   }
 
   async removeAll() {

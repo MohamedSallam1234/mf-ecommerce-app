@@ -37,3 +37,15 @@
   font-size: 20px;
   text-transform: lowercase;
 }
+
+:host {
+  [dir="rtl"] {
+    .ion-padding {
+      text-align: right;
+    }
+
+    ion-button {
+      flex-direction: row-reverse;
+    }
+  }
+}

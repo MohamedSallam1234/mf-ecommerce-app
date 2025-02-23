@@ -27,6 +27,7 @@ export class SignInPage {
   email = signal('');
   password = signal('');
   isLoading = signal(false);
+  error = signal('');
 
   private async showToast({
     message,
@@ -52,6 +53,7 @@ export class SignInPage {
     });
     await toast.present();
   }
+
   async onSignin() {
     if (this.isLoading()) {
       console.warn('Sign-in attempt while already loading.');
@@ -82,13 +84,18 @@ export class SignInPage {
       console.log('Received response:', response);
 
       if (response.success) {
+        this.authService.setCurrentUser(response.user);
         await this.showToast({
           message: 'Welcome back! Login successful',
           color: 'success',
           duration: 2000,
         });
         console.log('Navigating to Tabs Page.');
-        this.router.navigate(['/tabs']);
+        if (response.user.role === 'admin') {
+          this.router.navigate(['/admin']);
+        } else {
+          this.router.navigate(['/tabs/home']);
+        }
       } else {
         console.warn('Sign-in failed without error catch:', response);
         await this.showToast({
@@ -98,7 +105,7 @@ export class SignInPage {
         });
       }
     } catch (error: any) {
-      console.error('Sign in error caught:', error);
+      console.error('Sign in error:', error);
       const errorMessage =
         error.error?.message || 'Login failed. Please try again.';
       await this.showToast({

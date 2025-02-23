@@ -11,6 +11,10 @@ import {
   IonSpinner,
   LoadingController,
   ToastController,
+  IonHeader,
+  IonToolbar,
+  IonTitle,
+  IonButtons,
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { arrowBackOutline } from 'ionicons/icons';
@@ -18,6 +22,9 @@ import { RouterModule, Router } from '@angular/router';
 import { AuthService } from '../../services/auth/auth.service';
 import { User } from '../../models/user.model';
 import { firstValueFrom } from 'rxjs';
+import { TranslateService } from '@ngx-translate/core';
+import { TranslateModule } from '@ngx-translate/core';
+
 @Component({
   selector: 'app-sign-up',
   templateUrl: './sign-up.page.html',
@@ -32,6 +39,11 @@ import { firstValueFrom } from 'rxjs';
     IonItem,
     IonLabel,
     IonButton,
+    TranslateModule,
+    IonHeader,
+    IonToolbar,
+    IonTitle,
+    IonButtons,
     IonIcon,
     IonSpinner,
   ],
@@ -41,15 +53,19 @@ export class SignUpPage {
   private router = inject(Router);
   private loadingCtrl = inject(LoadingController);
   private toastCtrl = inject(ToastController);
+  private translate = inject(TranslateService);
 
   firstName = signal('');
   lastName = signal('');
   email = signal('');
   password = signal('');
   isLoading = signal(false);
+  currentLang = signal<string>('en');
 
   constructor() {
     addIcons({ arrowBackOutline });
+    this.translate.setDefaultLang('en');
+    this.translate.use('en');
   }
 
   private async showToast({
@@ -179,5 +195,12 @@ export class SignUpPage {
 
   updatePassword(event: CustomEvent) {
     this.password.set(event.detail.value);
+  }
+
+  switchLanguage() {
+    const newLang = this.currentLang() === 'en' ? 'ar' : 'en';
+    this.currentLang.set(newLang);
+    this.translate.use(newLang);
+    document.dir = newLang === 'ar' ? 'rtl' : 'ltr';
   }
 }

@@ -9,16 +9,16 @@
 
   <ion-grid>
     <ion-row>
-      @if (favoritesService.getFavorites()().length === 0) {
+      @if (favoritesService.favorites().length === 0) {
       <ion-col size="12">
         <div class="empty-state">
           <p>No favorites added yet</p>
         </div>
       </ion-col>
-      } @else { @for (product of favoritesService.getFavorites()(); track
-      product.id) {
+      } @else { @for (product of favoritesService.favorites(); track
+      product._id) {
       <ion-col size="6">
-        <div class="product-card" (click)="navigateToProduct(product.id)">
+        <div class="product-card" (click)="navigateToProduct(product._id)">
           <div class="product-image">
             <img [src]="product.image" [alt]="product.title" />
             <ion-button

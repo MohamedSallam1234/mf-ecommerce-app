@@ -1,0 +1,105 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="goBack()">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Edit Product</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="form-container">
+    @if (isLoading()) {
+    <ion-spinner name="crescent"></ion-spinner>
+    } @if (error()) {
+    <div class="error-message">
+      <ion-icon name="alert-circle-outline"></ion-icon>
+      <span>{{ error() }}</span>
+    </div>
+    }
+
+    <form (ngSubmit)="saveProduct()">
+      <ion-item>
+        <ion-label position="floating" class="required-label">Title</ion-label>
+        <ion-input
+          [(ngModel)]="product().title"
+          name="title"
+          required
+          placeholder="Enter product title"
+        ></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating" class="required-label">Price</ion-label>
+        <ion-input
+          type="number"
+          [(ngModel)]="product().price"
+          name="price"
+          required
+          min="0"
+          step="0.01"
+          placeholder="0.00"
+        ></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating" class="required-label"
+          >Description</ion-label
+        >
+        <ion-textarea
+          [(ngModel)]="product().description"
+          name="description"
+          required
+          rows="4"
+          placeholder="Enter product description"
+        ></ion-textarea>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating" class="required-label"
+          >Category</ion-label
+        >
+        <ion-select
+          [(ngModel)]="product().category"
+          name="category"
+          required
+          placeholder="Select a category"
+          interface="action-sheet"
+        >
+          <ion-select-option value="electronics">Electronics</ion-select-option>
+          <ion-select-option value="jewelery">Jewelery</ion-select-option>
+          <ion-select-option value="men's clothing"
+            >Men's Clothing</ion-select-option
+          >
+          <ion-select-option value="women's clothing"
+            >Women's Clothing</ion-select-option
+          >
+        </ion-select>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating" class="required-label"
+          >Image URL</ion-label
+        >
+        <ion-input
+          [(ngModel)]="product().image"
+          name="image"
+          required
+          placeholder="https://example.com/image.jpg"
+        ></ion-input>
+      </ion-item>
+
+      <div class="submit-button">
+        <ion-button expand="block" type="submit" [disabled]="isLoading()">
+          @if (isLoading()) {
+          <ion-spinner name="crescent"></ion-spinner>
+          } @else {
+          <span>Save Changes</span>
+          }
+        </ion-button>
+      </div>
+    </form>
+  </div>
+</ion-content>

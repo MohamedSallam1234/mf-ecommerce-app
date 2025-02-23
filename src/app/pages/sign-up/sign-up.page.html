@@ -1,13 +1,26 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{ 'SIGNUP.TITLE' | translate }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="switchLanguage()">
+        {{ currentLang() === 'en' ? 'عربي' : 'English' }}
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
 <ion-content>
   <div class="sign-up-container">
     <ion-button fill="clear" routerLink="/signin">
       <ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon>
     </ion-button>
-    <h1>Create an account</h1>
+    <h1>{{ 'SIGNUP.TITLE' | translate }}</h1>
 
     <div>
       <ion-item class="custom-input">
-        <ion-label position="floating">First Name</ion-label>
+        <ion-label position="floating"
+          >{{ 'SIGNUP.FIRST_NAME' | translate }}</ion-label
+        >
         <ion-input
           type="text"
           [value]="firstName()"
@@ -15,7 +28,9 @@
         ></ion-input>
       </ion-item>
       <ion-item class="custom-input">
-        <ion-label position="floating">Last Name</ion-label>
+        <ion-label position="floating"
+          >{{ 'SIGNUP.LAST_NAME' | translate }}</ion-label
+        >
         <ion-input
           type="text"
           [value]="lastName()"
@@ -23,7 +38,9 @@
         ></ion-input>
       </ion-item>
       <ion-item class="custom-input">
-        <ion-label position="floating">Email Address</ion-label>
+        <ion-label position="floating"
+          >{{ 'SIGNUP.EMAIL' | translate }}</ion-label
+        >
         <ion-input
           type="email"
           [value]="email()"
@@ -31,7 +48,9 @@
         ></ion-input>
       </ion-item>
       <ion-item class="custom-input">
-        <ion-label position="floating">Password</ion-label>
+        <ion-label position="floating"
+          >{{ 'SIGNUP.PASSWORD' | translate }}</ion-label
+        >
         <ion-input
           type="password"
           autocomplete="new-password"
@@ -50,7 +69,7 @@
         @if (isLoading()) {
         <ion-spinner name="circular"></ion-spinner>
         } @else {
-        <span>Continue</span>
+        <span>{{ 'SIGNUP.CONTINUE' | translate }}</span>
         }
       </ion-button>
     </div>

@@ -44,16 +44,18 @@ export class ProductDetailsPage implements OnInit {
   }
 
   ngOnInit() {
-    const id = Number(this.route.snapshot.paramMap.get('id'));
-    this.loadProduct(id);
+    const _id = this.route.snapshot.paramMap.get('id');
+    if (_id) {
+      this.loadProduct(_id);
+    }
   }
 
-  loadProduct(id: number) {
+  loadProduct(_id: string) {
     this.isLoading.set(true);
     this.error.set(null);
 
     this.productService
-      .getProductById(id)
+      .getProductById(_id)
       .pipe(finalize(() => this.isLoading.set(false)))
       .subscribe({
         next: (product) => this.product.set(product),

@@ -23,7 +23,7 @@ import {
   cardOutline,
   helpCircleOutline,
 } from 'ionicons/icons';
-
+import { AuthService } from '../../services/auth/auth.service';
 const PROFILE_IMAGE_KEY = 'profile_image';
 
 @Component({
@@ -53,7 +53,7 @@ export class ProfilePage implements OnInit {
     { title: 'Help', icon: 'help-circle-outline' },
   ];
 
-  constructor(private router: Router) {
+  constructor(private router: Router, private authService: AuthService) {
     addIcons({
       chevronForward,
       homeOutline,
@@ -109,6 +109,7 @@ export class ProfilePage implements OnInit {
   async signOut() {
     // Optional: Clear profile image on sign out
     await Preferences.remove({ key: PROFILE_IMAGE_KEY });
+    await this.authService.logout();
     this.router.navigate(['/sign-in']);
   }
 }

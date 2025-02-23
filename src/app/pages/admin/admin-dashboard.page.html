@@ -1,0 +1,57 @@
+<ion-content class="ion-padding">
+  <div class="admin-header">
+    <h1>Admin Dashboard</h1>
+  </div>
+
+  <ion-button
+    expand="block"
+    class="add-product-button"
+    routerLink="/admin/add-product"
+  >
+    <ion-icon name="add-outline"></ion-icon>
+    Add New Product
+  </ion-button>
+
+  @if (isLoading()) {
+  <div class="loading-spinner">
+    <ion-spinner></ion-spinner>
+  </div>
+  } @else if (products().length === 0) {
+  <div class="empty-state">
+    <ion-icon name="cube-outline"></ion-icon>
+    <h2>No Products Found</h2>
+    <p>Start by adding your first product</p>
+  </div>
+  } @else {
+  <div class="product-list">
+    @for (product of products(); track product._id) {
+    <div class="product-item">
+      <div class="product-content">
+        <div class="product-image">
+          <img [src]="product.image" [alt]="product.title" />
+        </div>
+        <div class="product-info">
+          <h2>{{ product.title }}</h2>
+          <div class="category">{{ product.category }}</div>
+          <div class="price">{{ product.price | currency }}</div>
+        </div>
+        <div class="action-buttons">
+          <ion-button
+            class="edit-button"
+            [routerLink]="['/admin/edit-product', product._id]"
+          >
+            <ion-icon name="create-outline"></ion-icon>
+          </ion-button>
+          <ion-button
+            class="delete-button"
+            (click)="deleteProduct(product._id)"
+          >
+            <ion-icon name="trash-outline"></ion-icon>
+          </ion-button>
+        </div>
+      </div>
+    </div>
+    }
+  </div>
+  }
+</ion-content>

@@ -16,7 +16,7 @@
   </div>
   } @else {
   <div class="cart-items">
-    @for (item of cartService.getCartItems()(); track item.id) {
+    @for (item of cartService.getCartItems()(); track item._id) {
     <div class="cart-item">
       <img [src]="item.image" [alt]="item.title" />
       <div class="item-details">
@@ -31,11 +31,11 @@
         <div class="price-quantity">
           <span class="price">${{ item.price }}</span>
           <div class="quantity-controls">
-            <ion-button fill="clear" (click)="updateQuantity(item.id, -1)">
+            <ion-button fill="clear" (click)="updateQuantity(item._id, -1)">
               <ion-icon name="remove-outline"></ion-icon>
             </ion-button>
             <span>{{ item.quantity }}</span>
-            <ion-button fill="clear" (click)="updateQuantity(item.id, 1)">
+            <ion-button fill="clear" (click)="updateQuantity(item._id, 1)">
               <ion-icon name="add-outline"></ion-icon>
             </ion-button>
           </div>
