@@ -9,7 +9,6 @@ import {
   IonLabel,
   IonButton,
   IonIcon,
-  IonTitle,
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { arrowBackOutline } from 'ionicons/icons';
