@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, inject, signal } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { User } from 'src/app/models/user.model';
 import { environment } from 'src/environments/environment';
@@ -10,13 +10,22 @@ import { catchError, timeout } from 'rxjs/operators';
 })
 export class AuthService {
   private apiUrl = environment.authApiUrl;
-  private endpoints = environment.endpoints;
   private http = inject(HttpClient);
+  private currentUserEmail: string | null = null;
+  private currentUser = signal<any>(null);
 
   constructor() {
     console.log('AuthService Initialized');
     console.log('API URL:', this.apiUrl);
-    console.log('Endpoints:', this.endpoints);
+    // Load user from localStorage on service initialization
+    this.loadUserFromStorage();
+  }
+
+  private loadUserFromStorage() {
+    const storedUser = localStorage.getItem('currentUser');
+    if (storedUser) {
+      this.currentUser.set(JSON.parse(storedUser));
+    }
   }
 
   signin(user: User): Observable<any> {
@@ -24,15 +33,13 @@ export class AuthService {
       'Content-Type': 'application/json',
     });
 
-    return this.http
-      .post(`${this.apiUrl}${this.endpoints.signin}`, user, { headers })
-      .pipe(
-        timeout(10000), // 10 seconds timeout
-        catchError((error) => {
-          console.error('Error in signin request:', error);
-          return throwError(() => error);
-        })
-      );
+    return this.http.post(`${this.apiUrl}/signin`, user, { headers }).pipe(
+      timeout(10000), // 10 seconds timeout
+      catchError((error) => {
+        console.error('Error in signin request:', error);
+        return throwError(() => error);
+      })
+    );
   }
 
   signup(user: User): Observable<any> {
@@ -40,7 +47,7 @@ export class AuthService {
       'Content-Type': 'application/json',
     });
     return this.http
-      .post(`${this.apiUrl}${this.endpoints.signup}`, user, {
+      .post(`${this.apiUrl}/signup`, user, {
         headers,
       })
       .pipe(
@@ -50,5 +57,53 @@ export class AuthService {
           return throwError(() => error);
         })
       );
+  }
+
+  setCurrentUserEmail(email: string) {
+    this.currentUserEmail = email;
+  }
+
+  getCurrentUserEmail(): string {
+    return this.currentUserEmail || 'guest';
+  }
+
+  clearCurrentUser() {
+    // Clear the user signal
+    this.currentUser.set(null);
+
+    // Clear stored user data
+    localStorage.removeItem('currentUser');
+
+    // Clear email
+    this.currentUserEmail = null;
+
+    // Clear any other user-related data
+    // For example: tokens, session data, etc.
+  }
+
+  async isAdmin(): Promise<boolean> {
+    try {
+      const user = this.currentUser();
+      console.log('Current user role:', user?.role);
+      return user?.role === 'admin';
+    } catch (error) {
+      console.error('Error checking admin status:', error);
+      return false;
+    }
+  }
+
+  setCurrentUser(user: any) {
+    console.log('Setting current user:', user);
+    this.currentUser.set(user);
+    // Store user in localStorage
+    localStorage.setItem('currentUser', JSON.stringify(user));
+  }
+
+  getCurrentUser(): User | null {
+    return this.currentUser();
+  }
+
+  logout() {
+    this.clearCurrentUser();
   }
 }

@@ -6,24 +6,13 @@ import {
 } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, timeout, tap, map } from 'rxjs/operators';
-
-//import { environment } from '../../../environments/environment';
-
-// interface ProductResponse {
-//   status: string;
-//   results: number;
-//   data: {
-//     products: any[];
-//   };
-// }
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProductService {
-  // private productApiUrl = environment.productApiUrl;
-  private productApiUrl = 'https://fakestoreapi.com/products';
-  // private productApiUrl = 'http://localhost:4000/api/products';
+  private productApiUrl = environment.productApiUrl;
   private http = inject(HttpClient);
 
   constructor() {
@@ -35,9 +24,10 @@ export class ProductService {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       Accept: 'application/json',
+      'ngrok-skip-browser-warning': 'true',
     });
 
-    return this.http.get<any[]>(this.productApiUrl, { headers }).pipe(
+    return this.http.get<any[]>(`${this.productApiUrl}`, { headers }).pipe(
       timeout(10000), // 10 seconds timeout
       map((response) => response),
       tap((products) => console.log('Products:', products)),
@@ -48,13 +38,14 @@ export class ProductService {
     );
   }
 
-  getProductById(id: number): Observable<any> {
+  getProductById(_id: string): Observable<any> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       Accept: 'application/json',
+      'ngrok-skip-browser-warning': 'true',
     });
 
-    return this.http.get<any>(`${this.productApiUrl}/${id}`, { headers }).pipe(
+    return this.http.get<any>(`${this.productApiUrl}/${_id}`, { headers }).pipe(
       timeout(10000),
       tap((product) => console.log('Product:', product)),
       catchError((error: HttpErrorResponse) => {

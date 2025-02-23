@@ -1,84 +1,67 @@
 import { Injectable, signal } from '@angular/core';
 import { Preferences } from '@capacitor/preferences';
-
-const CART_KEY = 'cart_items';
-
-export interface CartItem {
-  id: number;
-  title: string;
-  price: number;
-  image: string;
-  quantity: number;
-  size?: string;
-  color?: string;
-}
+import { CartItem } from 'src/app/models/cartItem.model';
+import { AuthService } from '../auth/auth.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CartService {
-  private cartItems = signal<CartItem[]>([]);
+  cartItems = signal<CartItem[]>([]);
 
-  constructor() {
+  constructor(private authService: AuthService) {
     this.loadCart();
   }
 
+  private getUserCartKey(): string {
+    const userEmail = this.authService.getCurrentUserEmail();
+    return `cart_${userEmail}`;
+  }
+
   private async loadCart() {
-    const { value } = await Preferences.get({ key: CART_KEY });
+    const cartKey = this.getUserCartKey();
+    const { value } = await Preferences.get({ key: cartKey });
     if (value) {
       this.cartItems.set(JSON.parse(value));
     }
   }
 
-  private async saveCart(items: CartItem[]) {
+  private async saveCart() {
+    const cartKey = this.getUserCartKey();
     await Preferences.set({
-      key: CART_KEY,
-      value: JSON.stringify(items),
+      key: cartKey,
+      value: JSON.stringify(this.cartItems()),
     });
+  }
+
+  async addToCart(product: any, quantity: number) {
+    const currentItems = this.cartItems();
+    const existingItem = currentItems.find((item) => item._id === product._id);
+
+    if (existingItem) {
+      existingItem.quantity += quantity;
+      this.cartItems.set([...currentItems]);
+    } else {
+      this.cartItems.set([...currentItems, { ...product, quantity }]);
+    }
+    await this.saveCart();
+  }
+
+  async clearCart() {
+    const cartKey = this.getUserCartKey();
+    await Preferences.remove({ key: cartKey });
+    this.cartItems.set([]);
   }
 
   getCartItems() {
     return this.cartItems;
   }
 
-  async addToCart(
-    product: any,
-    quantity: number = 1,
-    size: string = 'M',
-    color: string = ''
-  ) {
-    const currentItems = this.cartItems();
-    const existingItem = currentItems.find((item) => item.id === product.id);
-
-    let newItems: CartItem[];
-    if (existingItem) {
-      newItems = currentItems.map((item) =>
-        item.id === product.id
-          ? { ...item, quantity: item.quantity + quantity }
-          : item
-      );
-    } else {
-      const newItem: CartItem = {
-        id: product.id,
-        title: product.title,
-        price: product.price,
-        image: product.image,
-        quantity,
-        size,
-        color,
-      };
-      newItems = [...currentItems, newItem];
-    }
-
-    this.cartItems.set(newItems);
-    await this.saveCart(newItems);
-  }
-
-  async updateQuantity(productId: number, change: number) {
+  async updateQuantity(_id: string, change: number) {
     const currentItems = this.cartItems();
     const newItems = currentItems
       .map((item) => {
-        if (item.id === productId) {
+        if (item._id === _id) {
           const newQuantity = item.quantity + change;
           return newQuantity > 0 ? { ...item, quantity: newQuantity } : item;
         }
@@ -87,12 +70,12 @@ export class CartService {
       .filter((item) => item.quantity > 0);
 
     this.cartItems.set(newItems);
-    await this.saveCart(newItems);
+    await this.saveCart();
   }
 
   async removeAll() {
     this.cartItems.set([]);
-    await this.saveCart([]);
+    await this.saveCart();
   }
 
   getSubtotal(): number {
@@ -107,7 +90,7 @@ export class CartService {
   }
 
   getTax(): number {
-    return 0; // Implement tax calculation if needed
+    return 0;
   }
 
   getTotal(): number {

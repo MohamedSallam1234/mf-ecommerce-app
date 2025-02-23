@@ -1,60 +1,60 @@
 import { Injectable, signal } from '@angular/core';
 import { Preferences } from '@capacitor/preferences';
-
-const FAVORITES_KEY = 'favorites';
-
-export interface Product {
-  id: number;
-  title: string;
-  price: number;
-  image: string;
-  category: string;
-}
+import { Product } from 'src/app/models/product.model';
+import { AuthService } from '../auth/auth.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FavoritesService {
-  private favorites = signal<Product[]>([]);
+  favorites = signal<Product[]>([]);
 
-  constructor() {
+  constructor(private authService: AuthService) {
     this.loadFavorites();
   }
 
+  private getUserFavoritesKey(): string {
+    const userEmail = this.authService.getCurrentUserEmail();
+    return `favorites_${userEmail}`;
+  }
+
   private async loadFavorites() {
-    const { value } = await Preferences.get({ key: FAVORITES_KEY });
+    const favoritesKey = this.getUserFavoritesKey();
+    const { value } = await Preferences.get({ key: favoritesKey });
     if (value) {
       this.favorites.set(JSON.parse(value));
     }
   }
 
-  private async saveFavorites(favorites: Product[]) {
+  private async saveFavorites() {
+    const favoritesKey = this.getUserFavoritesKey();
     await Preferences.set({
-      key: FAVORITES_KEY,
-      value: JSON.stringify(favorites),
+      key: favoritesKey,
+      value: JSON.stringify(this.favorites()),
     });
-  }
-
-  getFavorites() {
-    return this.favorites;
   }
 
   async toggleFavorite(product: Product) {
     const currentFavorites = this.favorites();
-    const index = currentFavorites.findIndex((p) => p.id === product.id);
+    const index = currentFavorites.findIndex((p) => p._id === product._id);
 
-    let newFavorites: Product[];
-    if (index === -1) {
-      newFavorites = [...currentFavorites, product];
+    if (index > -1) {
+      currentFavorites.splice(index, 1);
     } else {
-      newFavorites = currentFavorites.filter((p) => p.id !== product.id);
+      currentFavorites.push(product);
     }
 
-    this.favorites.set(newFavorites);
-    await this.saveFavorites(newFavorites);
+    this.favorites.set([...currentFavorites]);
+    await this.saveFavorites();
   }
 
-  isFavorite(productId: number): boolean {
-    return this.favorites().some((p) => p.id === productId);
+  async clearFavorites() {
+    const favoritesKey = this.getUserFavoritesKey();
+    await Preferences.remove({ key: favoritesKey });
+    this.favorites.set([]);
+  }
+
+  isFavorite(productId: string): boolean {
+    return this.favorites().some((p) => p._id === productId);
   }
 }
